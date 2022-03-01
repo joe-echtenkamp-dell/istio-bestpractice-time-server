@@ -22,6 +22,7 @@ COPY --from=build /istio-unittest-time-server /istio-unittest-time-server
 
 EXPOSE 8080
 
-USER nonroot:nonroot
+RUN addgroup -S nonroot && adduser -S nonroot -G nonroot 
+USER nonroot
 
 ENTRYPOINT ["/istio-unittest-time-server"]
