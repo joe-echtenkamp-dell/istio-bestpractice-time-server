@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM golang AS build
+FROM golang:alpine AS build
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ COPY go.sum ./
 RUN go mod download
 
 COPY *.go ./
-RUN go build -o /istio-unittest-time-server
+RUN go build -o ./server.out
 
 ##
 ## Deploy
@@ -18,11 +18,11 @@ FROM alpine
 
 WORKDIR /
 
-COPY --from=build /istio-unittest-time-server /istio-unittest-time-server
+COPY --from=build /app/server.out /server.out
 
 EXPOSE 8080
 
-RUN addgroup -S nonroot && adduser -S nonroot -G nonroot 
-USER nonroot
+#RUN addgroup -S nonroot && adduser -S nonroot -G nonroot 
+#USER nonroot
 
-ENTRYPOINT ["/istio-unittest-time-server"]
+ENTRYPOINT ["/server.out"]
