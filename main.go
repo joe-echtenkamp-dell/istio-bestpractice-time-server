@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -34,11 +35,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		Offset:  offset,
 	}
 	str, _ := json.Marshal(res)
-	fmt.Fprintf(w, string(str))
+	fmt.Fprint(w, string(str))
 }
 
 func main() {
-    log.SetOutput(os.Stdout)
+	log.SetOutput(os.Stdout)
 	log.Print("Starting time server")
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
