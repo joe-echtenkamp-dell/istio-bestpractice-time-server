@@ -16,6 +16,7 @@ type Result struct {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
+	log.Print("time server recieved request")
 	// check for request Header and return it
 	val, ok := r.Header["x-request-id"]
 	if ok {
@@ -37,6 +38,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+    log.SetOutput(os.Stdout)
+	log.Print("Starting time server")
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
