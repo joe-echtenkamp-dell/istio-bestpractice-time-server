@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -17,11 +16,12 @@ type Result struct {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	log.Print("time server recieved request")
+	log.Println("time server recieved request")
 	// check for request Header and return it
-	val, ok := r.Header["x-request-id"]
+	header := http.CanonicalHeaderKey("x-request-id")
+	val, ok := r.Header[header]
 	if ok {
-		w.Header().Add("x-request-id", val[0])
+		w.Header().Add(header, val[0])
 	}
 
 	dt := time.Now()
@@ -39,8 +39,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	log.SetOutput(os.Stdout)
-	log.Print("Starting time server")
+	// log.SetOutput(os.Stdout)
+	log.Println("Starting time server")
 	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
